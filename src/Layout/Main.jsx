@@ -1,15 +1,37 @@
-import { Outlet } from "react-router-dom"; 
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
+import { useState } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import Sidebar from '../components/Sidebar';
 
 const Main = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const location = useLocation();
+
+  const currentIsAdmin = location.pathname.startsWith('/admin') || isAdmin;
+
   return (
-    <div>
-      <div className="border-b">
-        <Navbar></Navbar>
+    <div className="min-h-screen bg-[#F4F7FA] text-[#182B36] flex">
+      {/* Left Sidebar */}
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        isAdmin={currentIsAdmin}
+        onToggleRole={() => setIsAdmin(!isAdmin)}
+      />
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 lg:pl-64">
+        <Navbar
+          onOpenSidebar={() => setSidebarOpen(true)}
+          isAdmin={currentIsAdmin}
+          title="CircularShield"
+        />
+
+        <main className="flex-1 p-4 sm:p-8 max-w-7xl w-full mx-auto">
+          <Outlet />
+        </main>
       </div>
-      <Outlet></Outlet>
-      <Footer></Footer>
     </div>
   );
 };
