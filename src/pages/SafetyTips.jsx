@@ -36,7 +36,7 @@ export const SafetyTips = () => {
     <div className="space-y-6">
       {/* 1. Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Safety & Awareness
         </h1>
         <p className="text-sm text-[#64748B] mt-1">
@@ -52,7 +52,7 @@ export const SafetyTips = () => {
             className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs flex flex-col justify-between min-h-[170px] space-y-4 hover:shadow-md transition-shadow"
           >
             <div>
-              <h2 className="text-sm font-bold text-[#102C3A] mb-3">
+              <h2 className="text-sm font-bold text-[#0F172A] mb-3">
                 {tip.title}
               </h2>
               <p className="text-sm font-semibold text-[#182B36] leading-snug">
@@ -71,3 +71,4 @@ export const SafetyTips = () => {
 };
 
 export default SafetyTips;
+

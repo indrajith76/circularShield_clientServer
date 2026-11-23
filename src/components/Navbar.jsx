@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import logo from '../assets/c_logo1.png';
 
 export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = false }) => {
   return (
@@ -8,7 +9,7 @@ export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = fals
         <button
           type="button"
           onClick={onOpenSidebar}
-          className="lg:hidden p-2 rounded-lg text-[#102C3A] hover:bg-[#E2E8F0] transition-colors"
+          className="lg:hidden p-2 rounded-lg text-[#0F172A] hover:bg-[#E2E8F0] transition-colors"
           aria-label="Open Sidebar"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -16,8 +17,13 @@ export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = fals
           </svg>
         </button>
 
-        <div>
-          <h2 className="text-sm font-semibold text-[#102C3A]">{title}</h2>
+        <div className="flex items-center gap-2.5">
+          <img
+            src={logo}
+            alt="CircularShield"
+            className="h-11 sm:h-12 w-auto max-w-[150px] object-contain shrink-0"
+          />
+          <h2 className="text-sm font-semibold text-[#0F172A] hidden sm:block">{title}</h2>
         </div>
       </div>
 
@@ -30,7 +36,7 @@ export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = fals
         </Link>
         <Link
           to="/login"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[#102C3A] text-xs font-semibold hover:bg-[#F8FAFC] transition-colors shadow-xs"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold hover:bg-[#F8FAFC] transition-colors shadow-xs"
         >
           {isAdmin ? 'Admin Portal' : 'Sign In'}
         </Link>
@@ -40,3 +46,4 @@ export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = fals
 };
 
 export default Navbar;
+
