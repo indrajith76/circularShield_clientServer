@@ -1,27 +1,74 @@
-import { createBrowserRouter } from "react-router-dom";
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import Register from "../pages/Register"; 
-import Main from "../Layout/Main";
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import Main from '../Layout/Main';
+import Dashboard from '../pages/Dashboard';
+import AnalyzeCircular from '../pages/AnalyzeCircular';
+import AnalysisResult from '../pages/AnalysisResult';
+import Organizations from '../pages/Organizations';
+import ReportScam from '../pages/ReportScam';
+import AnalysisHistory from '../pages/AnalysisHistory';
+import SafetyTips from '../pages/SafetyTips';
+import AdminDashboard from '../pages/AdminDashboard';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Main />,
     children: [
       {
-        path: "/",
-        element: <Home />,
+        path: '/',
+        element: <Dashboard />,
+      },
+      {
+        path: '/dashboard',
+        element: <Dashboard />,
+      },
+      {
+        path: '/analyze',
+        element: <AnalyzeCircular />,
+      },
+      {
+        path: '/analysis-result',
+        element: <AnalysisResult />,
+      },
+      {
+        path: '/organizations',
+        element: <Organizations />,
+      },
+      {
+        path: '/report-scam',
+        element: <ReportScam />,
+      },
+      {
+        path: '/history',
+        element: <AnalysisHistory />,
+      },
+      {
+        path: '/safety-tips',
+        element: <SafetyTips />,
+      },
+      {
+        path: '/admin',
+        element: <AdminDashboard />,
+      },
+      {
+        path: '/admin/dashboard',
+        element: <AdminDashboard />,
       },
     ],
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/register",
+    path: '/register',
     element: <Register />,
+  },
+  {
+    path: '*',
+    element: <Navigate to="/dashboard" replace />,
   },
 ]);
 
