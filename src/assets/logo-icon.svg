@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <defs>
+    <!-- Shield Outer Gradient -->
+    <linearGradient id="shieldGrad" x1="100" y1="20" x2="100" y2="170" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#0066FF" />
+      <stop offset="100%" stopColor="#0B2038" />
+    </linearGradient>
+
+    <!-- Shield Inner Facet -->
+    <linearGradient id="shieldFacet" x1="45" y1="35" x2="155" y2="155" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#1E75FF" />
+      <stop offset="60%" stopColor="#0C2D54" />
+      <stop offset="100%" stopColor="#081A30" />
+    </linearGradient>
+
+    <!-- Teal Orbit Swoosh Gradient -->
+    <linearGradient id="swooshGrad" x1="20" y1="120" x2="180" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#00BFA5" />
+      <stop offset="50%" stopColor="#087F70" />
+      <stop offset="100%" stopColor="#05B69C" />
+    </linearGradient>
+
+    <!-- Check Circle Gradient -->
+    <linearGradient id="checkCircleGrad" x1="130" y1="90" x2="155" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#00BFA5" />
+      <stop offset="100%" stopColor="#057567" />
+    </linearGradient>
+
+    <!-- Document Shadow -->
+    <filter id="docShadow" x="55" y="42" width="90" height="105" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#051525" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Outer Shield -->
+  <path d="M100 22 C138 35 158 46 166 68 C166 112 144 148 100 172 C56 148 34 112 34 68 C42 46 62 35 100 22 Z" fill="url(#shieldGrad)" />
+
+  <!-- Shield Inner Border Highlight -->
+  <path d="M100 28 C134 40 151 50 159 69 C159 108 139 141 100 163 C61 141 41 108 41 69 C49 50 66 40 100 28 Z" fill="url(#shieldFacet)" stroke="#388BFD" stroke-width="2.5" stroke-opacity="0.5" />
+
+  <!-- Back Portion of Swoosh -->
+  <path d="M168 76 C178 88 174 104 158 116 C144 126 122 134 100 137" stroke="url(#swooshGrad)" stroke-width="12" stroke-linecap="round" fill="none" opacity="0.4" />
+
+  <!-- Job Circular Document with Folded Top Right Corner -->
+  <g filter="url(#docShadow)">
+    <!-- Document Base -->
+    <path d="M68 52 C68 47.5 71.5 44 76 44 H114 L132 62 V128 C132 132.5 128.5 136 124 136 H76 C71.5 136 68 132.5 68 128 Z" fill="#FFFFFF" />
+    <!-- Folded Corner Flap -->
+    <path d="M114 44 V58 C114 60.2 115.8 62 118 62 H132 Z" fill="#D3E2F2" />
+    
+    <!-- "JOB" Header text in Document -->
+    <text x="100" y="78" fill="#102C3A" font-family="'Inter', -apple-system, sans-serif" font-weight="800" font-size="16" letter-spacing="1" text-anchor="middle">JOB</text>
+
+    <!-- Document Lines (Text Placeholders) -->
+    <rect x="80" y="88" width="40" height="4.5" rx="2.25" fill="#8FA4BD" />
+    <rect x="80" y="98" width="40" height="4.5" rx="2.25" fill="#8FA4BD" />
+    <rect x="80" y="108" width="28" height="4.5" rx="2.25" fill="#B0C1D4" />
+  </g>
+
+  <!-- Front Orbit Swoosh Swirling Across Shield -->
+  <path d="M22 118 C28 140 70 148 108 138 C144 128 166 108 172 82 C174 74 168 68 160 70 C154 72 148 76 142 82 C126 98 94 114 64 120 C46 124 32 122 22 118 Z" fill="url(#swooshGrad)" />
+
+  <!-- Verification Checkmark Badge with Green/Teal Circle -->
+  <g transform="translate(142, 114)">
+    <circle cx="0" cy="0" r="23" fill="#FFFFFF" />
+    <circle cx="0" cy="0" r="19.5" fill="url(#checkCircleGrad)" />
+    <!-- White Checkmark -->
+    <path d="M-8 -1 L-2.5 5 L8 -7" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+  </g>
+</svg>

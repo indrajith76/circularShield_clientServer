@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 320" fill="none">
+  <!-- Definitions from Icon -->
+  <defs>
+    <linearGradient id="shieldGradP" x1="100" y1="15" x2="100" y2="165" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#0066FF" />
+      <stop offset="100%" stopColor="#0B2038" />
+    </linearGradient>
+
+    <linearGradient id="shieldFacetP" x1="45" y1="30" x2="155" y2="150" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#1E75FF" />
+      <stop offset="60%" stopColor="#0C2D54" />
+      <stop offset="100%" stopColor="#081A30" />
+    </linearGradient>
+
+    <linearGradient id="swooshGradP" x1="20" y1="115" x2="180" y2="75" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#00BFA5" />
+      <stop offset="50%" stopColor="#087F70" />
+      <stop offset="100%" stopColor="#05B69C" />
+    </linearGradient>
+
+    <linearGradient id="checkCircleGradP" x1="130" y1="85" x2="155" y2="135" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stopColor="#00BFA5" />
+      <stop offset="100%" stopColor="#057567" />
+    </linearGradient>
+
+    <filter id="docShadowP" x="55" y="37" width="90" height="105" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#051525" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Centered Icon Mark (scaled & shifted to top-center: center 300) -->
+  <g transform="translate(200, 10)">
+    <!-- Outer Shield -->
+    <path d="M100 22 C138 35 158 46 166 68 C166 112 144 148 100 172 C56 148 34 112 34 68 C42 46 62 35 100 22 Z" fill="url(#shieldGradP)" />
+
+    <!-- Shield Inner Border Highlight -->
+    <path d="M100 28 C134 40 151 50 159 69 C159 108 139 141 100 163 C61 141 41 108 41 69 C49 50 66 40 100 28 Z" fill="url(#shieldFacetP)" stroke="#388BFD" stroke-width="2.5" stroke-opacity="0.5" />
+
+    <!-- Job Circular Document with Folded Top Right Corner -->
+    <g filter="url(#docShadowP)">
+      <path d="M68 52 C68 47.5 71.5 44 76 44 H114 L132 62 V128 C132 132.5 128.5 136 124 136 H76 C71.5 136 68 132.5 68 128 Z" fill="#FFFFFF" />
+      <path d="M114 44 V58 C114 60.2 115.8 62 118 62 H132 Z" fill="#D3E2F2" />
+      <text x="100" y="78" fill="#102C3A" font-family="'Inter', sans-serif" font-weight="800" font-size="16" letter-spacing="1" text-anchor="middle">JOB</text>
+      <rect x="80" y="88" width="40" height="4.5" rx="2.25" fill="#8FA4BD" />
+      <rect x="80" y="98" width="40" height="4.5" rx="2.25" fill="#8FA4BD" />
+      <rect x="80" y="108" width="28" height="4.5" rx="2.25" fill="#B0C1D4" />
+    </g>
+
+    <!-- Front Orbit Swoosh -->
+    <path d="M22 118 C28 140 70 148 108 138 C144 128 166 108 172 82 C174 74 168 68 160 70 C154 72 148 76 142 82 C126 98 94 114 64 120 C46 124 32 122 22 118 Z" fill="url(#swooshGradP)" />
+
+    <!-- Verification Checkmark Badge -->
+    <g transform="translate(142, 114)">
+      <circle cx="0" cy="0" r="23" fill="#FFFFFF" />
+      <circle cx="0" cy="0" r="19.5" fill="url(#checkCircleGradP)" />
+      <path d="M-8 -1 L-2.5 5 L8 -7" fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+  </g>
+
+  <!-- Typography: CircularShield Text -->
+  <g transform="translate(300, 235)" text-anchor="middle">
+    <text font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="44" font-weight="800" letter-spacing="-0.5">
+      <tspan fill="#102C3A">Circular</tspan>
+      <tspan fill="#087F70">Shield</tspan>
+    </text>
+  </g>
+
+  <!-- Tagline: Verify • Detect • Stay Safe with Divider Lines -->
+  <g transform="translate(300, 275)">
+    <!-- Left Divider Line -->
+    <line x1="-210" y1="-5" x2="-135" y2="-5" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" />
+    
+    <!-- Tagline Text -->
+    <text x="0" y="0" text-anchor="middle" font-family="'Inter', system-ui, -apple-system, sans-serif" font-size="16" font-weight="600" fill="#182B36" letter-spacing="1.2">
+      Verify <tspan fill="#087F70">•</tspan> Detect <tspan fill="#087F70">•</tspan> Stay Safe
+    </text>
+
+    <!-- Right Divider Line -->
+    <line x1="135" y1="-5" x2="210" y2="-5" stroke="#CBD5E1" stroke-width="1.5" stroke-linecap="round" />
+  </g>
+</svg>

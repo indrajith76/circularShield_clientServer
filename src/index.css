@@ -1,2 +1,71 @@
 @import "tailwindcss";
-@plugin "daisyui";
+
+@theme {
+  --color-primary: #102C3A;
+  --color-primary-dark: #0A1C25;
+  --color-primary-light: #1D4355;
+  --color-secondary: #087F70;
+  --color-secondary-dark: #066559;
+  --color-secondary-light: #0AA390;
+  --color-background: #F7F9FA;
+  --color-surface: #FFFFFF;
+  --color-surface-hover: #F8FAFC;
+  --color-surface-subtle: #F1F5F8;
+  --color-verified: #16A36A;
+  --color-verified-light: #ECFDF5;
+  --color-suspicious: #DC4B4B;
+  --color-suspicious-light: #FEF2F2;
+  --color-unverified: #D99A28;
+  --color-unverified-light: #FFFBEB;
+  --color-apptext: #182B36;
+  --color-apptext-muted: #64748B;
+  --color-border: #E2E8F0;
+  --color-border-focus: #087F70;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: #E2E8F0;
+    box-sizing: border-box;
+  }
+  
+  html,
+  body {
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #182B36;
+    background-color: #F7F9FA;
+    overflow-x: hidden;
+    width: 100%;
+    -webkit-tap-highlight-color: transparent;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  img,
+  svg,
+  video,
+  canvas {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
