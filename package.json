@@ -12,6 +12,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.5",
     "daisyui": "^5.8.2",
+    "dotenv": "^18.0.10",
+    "firebase": "^13.4.0",
     "lucide-react": "^1.78.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
