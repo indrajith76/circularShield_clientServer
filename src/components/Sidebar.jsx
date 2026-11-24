@@ -15,17 +15,20 @@ export const Sidebar = ({ isOpen, onClose, isAdmin = false, onToggleRole }) => {
 
   const adminNavItems = [
     { label: 'Admin Dashboard', path: '/admin' },
-    { label: 'User Management', path: '/admin' },
-    { label: 'Scam Reports', path: '/admin' },
-    { label: 'Organizations', path: '/admin' },
-    { label: 'Safety Tips', path: '/admin' },
-    { label: 'Detection Stats', path: '/admin' },
+    { label: 'User Management', path: '/admin/users' },
+    { label: 'Scam Reports', path: '/admin/scam-reports' },
+    { label: 'Organizations', path: '/admin/organizations' },
+    { label: 'Safety Tips', path: '/admin/safety-tips' },
+    { label: 'Detection Stats', path: '/admin/detection-stats' },
   ];
 
   const navItems = isAdmin ? adminNavItems : userNavItems;
 
   const isActive = (path) => {
     if (path === '/dashboard' && (location.pathname === '/' || location.pathname === '/dashboard')) {
+      return true;
+    }
+    if (path === '/admin' && (location.pathname === '/admin' || location.pathname === '/admin/dashboard')) {
       return true;
     }
     return location.pathname === path;
@@ -87,8 +90,11 @@ export const Sidebar = ({ isOpen, onClose, isAdmin = false, onToggleRole }) => {
           {onToggleRole && (
             <button
               type="button"
-              onClick={onToggleRole}
-              className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-medium text-[#A7F3D0] bg-[#1E293B] hover:bg-[#334155] transition-colors"
+              onClick={() => {
+                onToggleRole();
+                onClose?.();
+              }}
+              className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-semibold text-[#A7F3D0] bg-[#1E293B] hover:bg-[#334155] transition-colors cursor-pointer"
             >
               Switch to {isAdmin ? 'User Portal' : 'Admin Portal'}
             </button>

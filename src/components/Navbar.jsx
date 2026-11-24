@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import logo from '../assets/c_logo1.png';
 
-export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = false }) => {
+export const Navbar = ({ onOpenSidebar, onToggleRole, title = 'CircularShield', isAdmin = false }) => {
   return (
     <header className="sticky top-0 z-30 bg-[#F4F7FA]/90 backdrop-blur-md border-b border-[#E2E8F0] px-4 sm:px-8 py-3.5 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -34,12 +34,22 @@ export const Navbar = ({ onOpenSidebar, title = 'CircularShield', isAdmin = fals
         >
           Quick Analyze
         </Link>
-        <Link
-          to="/login"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold hover:bg-[#F8FAFC] transition-colors shadow-xs"
-        >
-          {isAdmin ? 'Admin Portal' : 'Sign In'}
-        </Link>
+        {onToggleRole ? (
+          <button
+            type="button"
+            onClick={onToggleRole}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold hover:bg-[#F8FAFC] transition-colors shadow-xs cursor-pointer"
+          >
+            {isAdmin ? 'User Portal' : 'Admin Portal'}
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#CBD5E1] text-[#0F172A] text-xs font-semibold hover:bg-[#F8FAFC] transition-colors shadow-xs"
+          >
+            {isAdmin ? 'Admin Portal' : 'Sign In'}
+          </Link>
+        )}
       </div>
     </header>
   );
