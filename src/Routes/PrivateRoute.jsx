@@ -1,84 +1,84 @@
 
-import { Navigate, Outlet } from "react-router-dom";
-
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
 
-
 const PrivateRoute = () => {
+  const { user, profile, loading, logOut } = useAuth();
 
-  const {
-    user,
-    profile,
-    loading,
-    profileError,
-  } = useAuth();
+  const location = useLocation();
 
-
+  // Authentication loading
   if (loading) {
-
     return (
-
-      <div className="min-h-screen flex items-center justify-center">
-
-        <span className="loading loading-spinner loading-lg text-[#087F70]"></span>
-
+      <div className="min-h-screen flex items-center justify-center bg-[#F4F7FA]">
+        <span className="loading loading-spinner loading-lg text-[#087F70]" />
       </div>
     );
   }
 
-
+  // User is not logged in
   if (!user) {
-
-    return <Navigate to="/login" replace />;
-
+    return (
+      <Navigate
+        to="/login"
+        state={{ from: location }}
+        replace
+      />
+    );
   }
 
-
+  // MongoDB profile is missing
   if (!profile) {
-
     return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white p-8 rounded-2xl border text-center space-y-4">
+          <h2 className="text-xl font-bold text-red-600">
+            Profile Unavailable
+          </h2>
 
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+          <p className="text-sm text-[#64748B]">
+            Unable to retrieve your account profile.
+            Please log in again.
+          </p>
 
-        <p>
-          {profileError || "User profile is unavailable."}
-        </p>
-
-        <NavigateToLogin />
-
+          <button
+            onClick={logOut}
+            className="px-5 py-2 rounded-xl bg-[#087F70] text-white"
+          >
+            Log Out
+          </button>
+        </div>
       </div>
     );
   }
 
+  // Suspended account
+  if (profile.status === "suspended") {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white p-8 rounded-2xl border text-center space-y-4">
+          <h2 className="text-xl font-bold text-red-600">
+            Account Suspended
+          </h2>
 
+          <p className="text-sm text-[#64748B]">
+            Your account has been suspended.
+            Please contact the administrator.
+          </p>
+
+          <button
+            onClick={logOut}
+            className="px-5 py-2 rounded-xl bg-[#087F70] text-white"
+          >
+            Log Out
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Allow authenticated users
   return <Outlet />;
 };
-
-
-const NavigateToLogin = () => {
-
-  const { logOut } = useAuth();
-
-  const handleLogout = async () => {
-
-    try {
-      await logOut();
-    } catch {
-      alert("Unable to log out. Please try again.");
-    }
-  };
-
-  return (
-
-    <button
-      className="btn btn-primary"
-      onClick={handleLogout}
-    >
-      Return to Login
-    </button>
-
-  );
-};
-
 
 export default PrivateRoute;

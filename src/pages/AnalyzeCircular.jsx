@@ -1,14 +1,11 @@
 
-import {
-  useState,
-  useRef,
-  useEffect,
-} from "react";
+import { useState, useRef, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import {
   extractCircularText,
+  extractCircularFromUrl,
   analyzeCircular,
 } from "../services/analysisApi";
 
@@ -17,16 +14,68 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const MAX_TEXT_LENGTH = 50000;
 const MIN_TEXT_LENGTH = 20;
 
+const TABS = ["PDF", "Image", "Paste Text", "URL"];
+
+
+// =====================================
+// Status Configuration
+// =====================================
+
+const STATUS_CONFIG = {
+  idle: {
+    label: "Waiting for input",
+    style: "bg-[#F1F5F9] text-[#64748B]",
+  },
+
+  "file-selected": {
+    label: "File selected",
+    style: "bg-blue-50 text-blue-600",
+  },
+
+  extracting: {
+    label: "Extracting text...",
+    style: "bg-[#FFFBEB] text-[#D99A28]",
+  },
+
+  extracted: {
+    label: "Text extraction complete",
+    style: "bg-[#ECFDF5] text-[#16A36A]",
+  },
+
+  ready: {
+    label: "Text ready for analysis",
+    style: "bg-[#ECFDF5] text-[#16A36A]",
+  },
+
+  analyzing: {
+    label: "Analyzing circular...",
+    style: "bg-[#FFFBEB] text-[#D99A28]",
+  },
+
+  completed: {
+    label: "Analysis complete",
+    style: "bg-[#ECFDF5] text-[#16A36A]",
+  },
+
+  error: {
+    label: "Please check the error",
+    style: "bg-red-50 text-red-600",
+  },
+};
+
+
+// =====================================
+// Main Component
+// =====================================
 
 export const AnalyzeCircular = () => {
-
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
 
 
-  // ==============================
+  // ===================================
   // 1. Input States
-  // ==============================
+  // ===================================
 
   const [activeTab, setActiveTab] = useState("PDF");
 
@@ -40,10 +89,15 @@ export const AnalyzeCircular = () => {
 
   const [url, setUrl] = useState("");
 
+  const [urlTitle, setUrlTitle] = useState("");
 
-  // ==============================
+  const [extractedSourceUrl, setExtractedSourceUrl] =
+    useState("");
+
+
+  // ===================================
   // 2. Processing States
-  // ==============================
+  // ===================================
 
   const [extracting, setExtracting] = useState(false);
 
@@ -56,100 +110,105 @@ export const AnalyzeCircular = () => {
   const [status, setStatus] = useState("idle");
 
 
-  const tabs = ["PDF", "Image", "Paste Text", "URL"];
-
   const isFileTab =
     activeTab === "PDF" || activeTab === "Image";
 
+  const isUrlTab = activeTab === "URL";
+
   const isBusy = extracting || analyzing;
 
-
-  // Check whether extracted text is ready
   const isTextReady =
     extractedText.trim().length >= MIN_TEXT_LENGTH &&
     extractedText.length <= MAX_TEXT_LENGTH;
 
 
-  // ==============================
+  // ===================================
   // 3. Generate File Preview
-  // ==============================
+  // ===================================
 
   useEffect(() => {
-
     if (!selectedFile) {
-
       setPreviewUrl("");
-
       return;
     }
 
-    const objectUrl =
-      URL.createObjectURL(selectedFile);
+    const objectUrl = URL.createObjectURL(selectedFile);
 
     setPreviewUrl(objectUrl);
 
     return () => {
       URL.revokeObjectURL(objectUrl);
     };
-
   }, [selectedFile]);
 
 
-  // ==============================
-  // 4. Change Input Tab
-  // ==============================
+  // ===================================
+  // 4. Reset URL Metadata
+  // ===================================
+
+  const resetUrlMetadata = () => {
+    setUrlTitle("");
+    setExtractedSourceUrl("");
+  };
+
+
+  // ===================================
+  // 5. Change Input Tab
+  // ===================================
 
   const handleTabChange = (tab) => {
-
     if (isBusy || tab === activeTab) return;
 
     setActiveTab(tab);
+
     setSelectedFile(null);
+
     setExtractedText("");
+
     setUrl("");
+
+    resetUrlMetadata();
+
     setError("");
+
     setStatus("idle");
+
+    setDragging(false);
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-
   };
 
 
-  // ==============================
-  // 5. Change Language
-  // ==============================
+  // ===================================
+  // 6. Change Language
+  // ===================================
 
   const handleLanguageChange = (value) => {
-
     if (isBusy || value === language) return;
 
     setLanguage(value);
+
     setError("");
 
-    // Extract again if OCR language changes
-    if (isFileTab) {
-
+    if (isFileTab || isUrlTab) {
       setExtractedText("");
 
+      resetUrlMetadata();
+
       setStatus(
-        selectedFile
-          ? "file-selected"
-          : "idle"
+        selectedFile ? "file-selected" : "idle"
       );
-
     }
-
   };
 
 
-  // ==============================
-  // 6. Validate Uploaded File
-  // ==============================
+  // ===================================
+  // 7. Validate File
+  // ===================================
 
   const validateFile = (file) => {
-
     if (!file) {
       return "Please select a file.";
     }
@@ -167,14 +226,12 @@ export const AnalyzeCircular = () => {
       .pop()
       .toLowerCase();
 
-
     if (
       activeTab === "PDF" &&
       extension !== "pdf"
     ) {
       return "Please select a valid PDF file.";
     }
-
 
     if (
       activeTab === "Image" &&
@@ -184,16 +241,14 @@ export const AnalyzeCircular = () => {
     }
 
     return null;
-
   };
 
 
-  // ==============================
-  // 7. Select File
-  // ==============================
+  // ===================================
+  // 8. Select File
+  // ===================================
 
   const handleFileSelect = (file) => {
-
     if (!file || isBusy) return;
 
     setError("");
@@ -201,150 +256,123 @@ export const AnalyzeCircular = () => {
     const validationError = validateFile(file);
 
     if (validationError) {
-
       setError(validationError);
-
       return;
     }
 
     setSelectedFile(file);
-    setExtractedText("");
-    setStatus("file-selected");
 
+    setExtractedText("");
+
+    setStatus("file-selected");
   };
 
 
-  // ==============================
-  // 8. Drag and Drop
-  // ==============================
+  // ===================================
+  // 9. Drag and Drop
+  // ===================================
 
   const handleDrop = (event) => {
-
     event.preventDefault();
 
     setDragging(false);
 
     if (isBusy) return;
 
-    const file = event.dataTransfer.files[0];
-
-    handleFileSelect(file);
-
+    handleFileSelect(event.dataTransfer.files[0]);
   };
 
 
-  // ==============================
-  // 9. Remove File
-  // ==============================
+  // ===================================
+  // 10. Remove File
+  // ===================================
 
   const handleRemoveFile = () => {
-
     if (isBusy) return;
 
     setSelectedFile(null);
+
     setExtractedText("");
+
     setError("");
+
     setStatus("idle");
 
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
-
   };
 
 
-  // ==============================
-  // 10. Extract Text from File
-  // ==============================
+  // ===================================
+  // 11. Validate Extracted Text
+  // ===================================
+
+  const getExtractedText = (response) => {
+    const text =
+      response.text ??
+      response.result?.text ??
+      response.data?.text ??
+      "";
+
+    if (typeof text !== "string") {
+      throw new Error(
+        "The server returned invalid extracted text."
+      );
+    }
+
+    const cleanText = text.trim();
+
+    if (cleanText.length < MIN_TEXT_LENGTH) {
+      throw new Error(
+        "Not enough readable text was found."
+      );
+    }
+
+    if (cleanText.length > MAX_TEXT_LENGTH) {
+      throw new Error(
+        "Extracted text exceeds 50,000 characters."
+      );
+    }
+
+    return cleanText;
+  };
+
+
+  // ===================================
+  // 12. Extract Text from File
+  // ===================================
 
   const handleExtractText = async () => {
-
     if (isBusy) return;
 
     setError("");
 
     if (!selectedFile) {
-
       setError("Please select a file first.");
-
       return;
     }
 
     setExtracting(true);
+
     setExtractedText("");
+
     setStatus("extracting");
 
     try {
-
       const response = await extractCircularText(
         selectedFile,
         language
       );
 
+      const cleanText = getExtractedText(response);
 
-      if (response.success === false) {
-
-        throw new Error(
-          response.message || "Text extraction failed."
-        );
-
-      }
-
-
-      const text =
-        response.text ??
-        response.result?.text ??
-        response.data?.text ??
-        "";
-
-
-      if (
-        typeof text !== "string" ||
-        !text.trim()
-      ) {
-
-        throw new Error(
-          "No readable text was found in this file."
-        );
-
-      }
-
-
-      const cleanText = text.trim();
-
-
-      if (cleanText.length < MIN_TEXT_LENGTH) {
-
-        throw new Error(
-          "Not enough readable text was extracted. Please upload a clearer circular."
-        );
-
-      }
-
-
-      if (cleanText.length > MAX_TEXT_LENGTH) {
-
-        throw new Error(
-          "Extracted text exceeds 50,000 characters. Please upload a shorter document."
-        );
-
-      }
-
-
-      // Store extracted text internally
       setExtractedText(cleanText);
 
-
-      // Change button to Analyze Circular
       setStatus("extracted");
 
-
     } catch (err) {
-
-      console.error(
-        "Text extraction failed:",
-        err
-      );
+      console.error("File extraction failed:", err);
 
       setError(
         err.message || "Unable to extract text."
@@ -353,22 +381,137 @@ export const AnalyzeCircular = () => {
       setStatus("error");
 
     } finally {
-
       setExtracting(false);
-
     }
-
   };
 
 
-  // ==============================
-  // 11. Determine Source Type
-  // ==============================
+  // ===================================
+  // 13. Handle URL Input
+  // ===================================
+
+  const handleUrlChange = (value) => {
+    if (isBusy) return;
+
+    setUrl(value);
+
+    setExtractedText("");
+
+    resetUrlMetadata();
+
+    setError("");
+
+    setStatus("idle");
+  };
+
+
+  // ===================================
+  // 14. Validate URL
+  // ===================================
+
+  const validateUrl = (value) => {
+    try {
+      const parsedUrl = new URL(value);
+
+      if (
+        !["http:", "https:"].includes(
+          parsedUrl.protocol
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        parsedUrl.username ||
+        parsedUrl.password ||
+        !parsedUrl.hostname
+      ) {
+        return false;
+      }
+
+      return true;
+
+    } catch {
+      return false;
+    }
+  };
+
+
+  // ===================================
+  // 15. Extract Text from URL
+  // ===================================
+
+  const handleExtractUrl = async () => {
+    if (isBusy) return;
+
+    setError("");
+
+    const cleanUrl = url.trim();
+
+    if (!cleanUrl) {
+      setError("Please enter a job circular URL.");
+      return;
+    }
+
+    if (!validateUrl(cleanUrl)) {
+      setError(
+        "Please enter a valid HTTP or HTTPS URL."
+      );
+      return;
+    }
+
+    setExtracting(true);
+
+    setExtractedText("");
+
+    resetUrlMetadata();
+
+    setStatus("extracting");
+
+    try {
+      const response = await extractCircularFromUrl(
+        cleanUrl,
+        language
+      );
+
+      const cleanText = getExtractedText(response);
+
+      setExtractedText(cleanText);
+
+      setUrlTitle(
+        response.title ||
+        response.url_title ||
+        ""
+      );
+
+      setExtractedSourceUrl(
+        response.source_url || cleanUrl
+      );
+
+      setStatus("extracted");
+
+    } catch (err) {
+      console.error("URL extraction failed:", err);
+
+      setError(
+        err.message ||
+        "Unable to extract text from the URL."
+      );
+
+      setStatus("error");
+
+    } finally {
+      setExtracting(false);
+    }
+  };
+
+
+  // ===================================
+  // 16. Determine Source Type
+  // ===================================
 
   const getSourceType = () => {
-
     switch (activeTab) {
-
       case "PDF":
         return "pdf";
 
@@ -380,122 +523,94 @@ export const AnalyzeCircular = () => {
 
       default:
         return "text";
-
     }
-
   };
 
 
-  // ==============================
-  // 12. Analyze Circular
-  // ==============================
+  // ===================================
+  // 17. Analyze Circular
+  // ===================================
 
   const handleAnalyze = async () => {
-
     if (isBusy) return;
 
     setError("");
 
-
-    if (activeTab === "URL") {
-
-      setError(
-        "URL extraction is not connected yet."
-      );
-
-      return;
-
-    }
-
-
     const text = extractedText.trim();
 
-
     if (text.length < MIN_TEXT_LENGTH) {
-
       setError(
-        "Please provide at least 20 characters of circular text."
+        "Please provide at least 20 characters."
       );
-
       return;
-
     }
 
-
     if (text.length > MAX_TEXT_LENGTH) {
-
       setError(
         "Circular text must not exceed 50,000 characters."
       );
-
       return;
-
     }
 
-
     setAnalyzing(true);
+
     setStatus("analyzing");
 
-
     try {
-
       const sourceType = getSourceType();
 
+      const metadata = {
+        fileName: selectedFile?.name || null,
+
+        sourceUrl: isUrlTab
+          ? extractedSourceUrl || url.trim()
+          : null,
+
+        urlTitle: isUrlTab
+          ? urlTitle || null
+          : null,
+      };
 
       const response = await analyzeCircular(
         text,
         language,
-        sourceType
+        sourceType,
+        metadata
       );
 
-
       if (
-        response.success === false ||
         !response.result ||
         !response.analysis_id
       ) {
-
         throw new Error(
-          response.message ||
           "The server returned an incomplete analysis result."
         );
-
       }
-
 
       setStatus("completed");
 
-
-      // Navigate to the dynamic result page
       navigate("/analysis-result", {
-
         state: {
-
           analysisId: response.analysis_id,
 
           result: response.result,
 
-          text: text,
+          text,
 
-          language: language,
+          language,
 
-          sourceType: sourceType,
+          sourceType,
 
-          fileName: selectedFile?.name || null,
+          fileName: metadata.fileName,
 
-          sourceUrl: null,
+          sourceUrl: metadata.sourceUrl,
 
+          urlTitle: metadata.urlTitle,
         },
-
       });
 
-
     } catch (err) {
-
-      console.error(
-        "Analysis failed:",
-        err
-      );
+      console.error("Analysis failed:", err);
 
       setError(
         err.message ||
@@ -504,144 +619,87 @@ export const AnalyzeCircular = () => {
 
       setStatus("error");
 
-      // Do not clear extracted text.
-      // User can retry the analysis.
+      // Keep extracted text so analysis can be retried.
 
     } finally {
-
       setAnalyzing(false);
-
     }
-
   };
 
 
-  // ==============================
-  // 13. Single Dynamic Action Button
-  // ==============================
+  // ===================================
+  // 18. Dynamic Primary Action
+  // ===================================
 
   const handlePrimaryAction = () => {
-
     if (isBusy) return;
 
+    if (
+      activeTab === "Paste Text" ||
+      isTextReady
+    ) {
+      handleAnalyze();
+      return;
+    }
 
     if (isFileTab) {
-
-      if (isTextReady) {
-
-        handleAnalyze();
-
-      } else {
-
-        handleExtractText();
-
-      }
-
+      handleExtractText();
       return;
-
     }
 
-
-    if (activeTab === "Paste Text") {
-
-      handleAnalyze();
-
+    if (isUrlTab) {
+      handleExtractUrl();
     }
-
   };
 
 
-  // Determine button label
-  const getButtonLabel = () => {
+  // ===================================
+  // 19. Dynamic Button Label
+  // ===================================
 
+  const getButtonLabel = () => {
     if (extracting) {
-      return "Extracting Text...";
+      return isUrlTab
+        ? "Extracting from URL..."
+        : "Extracting Text...";
     }
 
     if (analyzing) {
       return "Analyzing Circular...";
     }
 
-    if (isFileTab && !isTextReady) {
-      return "Extract Text";
+    if (
+      activeTab === "Paste Text" ||
+      isTextReady
+    ) {
+      return "Analyze Circular";
     }
 
-    return "Analyze Circular";
+    if (isUrlTab) {
+      return "Extract from URL";
+    }
 
+    return "Extract Text";
   };
 
 
-  // Determine button color
   const isAnalyzeButton =
     activeTab === "Paste Text" || isTextReady;
 
-
-  // ==============================
-  // 14. Status Configuration
-  // ==============================
-
-  const statusConfig = {
-
-    idle: {
-      label: "Waiting for input",
-      style: "bg-[#F1F5F9] text-[#64748B]",
-    },
-
-    "file-selected": {
-      label: "File selected",
-      style: "bg-blue-50 text-blue-600",
-    },
-
-    extracting: {
-      label: "Extracting text...",
-      style: "bg-[#FFFBEB] text-[#D99A28]",
-    },
-
-    extracted: {
-      label: "Text extraction complete",
-      style: "bg-[#ECFDF5] text-[#16A36A]",
-    },
-
-    ready: {
-      label: "Text ready for analysis",
-      style: "bg-[#ECFDF5] text-[#16A36A]",
-    },
-
-    analyzing: {
-      label: "Analyzing circular...",
-      style: "bg-[#FFFBEB] text-[#D99A28]",
-    },
-
-    completed: {
-      label: "Analysis complete",
-      style: "bg-[#ECFDF5] text-[#16A36A]",
-    },
-
-    error: {
-      label: "Please check the error",
-      style: "bg-red-50 text-red-600",
-    },
-
-  };
-
-
   const currentStatus =
-    statusConfig[status] || statusConfig.idle;
+    STATUS_CONFIG[status] || STATUS_CONFIG.idle;
 
 
-  // ==============================
-  // 15. User Interface
-  // ==============================
+  // ===================================
+  // 20. User Interface
+  // ===================================
 
   return (
-
     <div className="space-y-6">
-
 
       {/* Page Header */}
 
       <div>
-
         <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Analyze a Job Circular
         </h1>
@@ -650,21 +708,15 @@ export const AnalyzeCircular = () => {
           Upload a PDF or image, paste circular text,
           or enter a job circular URL.
         </p>
-
       </div>
 
 
-      {/* Format Selector and Language */}
+      {/* Input Format and Language */}
 
       <div className="flex flex-wrap items-center justify-between gap-4">
 
-
-        {/* Input Format Tabs */}
-
         <div className="flex flex-wrap items-center gap-2">
-
-          {tabs.map((tab) => (
-
+          {TABS.map((tab) => (
             <button
               key={tab}
               type="button"
@@ -678,9 +730,7 @@ export const AnalyzeCircular = () => {
             >
               {tab}
             </button>
-
           ))}
-
         </div>
 
 
@@ -704,31 +754,24 @@ export const AnalyzeCircular = () => {
             }
             className="px-3 py-2 rounded-lg bg-white border border-[#E2E8F0] text-xs font-semibold text-[#0F172A] focus:outline-none focus:border-[#087F70]"
           >
-
-            <option value="en">
-              English
-            </option>
+            <option value="en">English</option>
 
             <option value="bn">
               বাংলা (Bangla)
             </option>
-
           </select>
 
         </div>
-
       </div>
 
 
       {/* Error Message */}
 
       {error && (
-
         <div
           role="alert"
           className="flex items-start justify-between gap-3 bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 text-sm"
         >
-
           <span>{error}</span>
 
           <button
@@ -739,40 +782,27 @@ export const AnalyzeCircular = () => {
           >
             ×
           </button>
-
         </div>
-
       )}
 
 
-      {/* Single Column Workspace */}
+      {/* Main Workspace */}
 
       <div className="w-full bg-white rounded-2xl p-4 sm:p-6 border border-[#E2E8F0] shadow-xs space-y-5">
 
-
-        {/* Workspace Title */}
-
         <h2 className="text-sm font-bold text-[#0F172A]">
-
           {isFileTab
             ? "File Preview"
             : activeTab === "Paste Text"
             ? "Circular Text Input"
             : "Circular URL"}
-
         </h2>
 
 
-        {/* ========================== */}
-        {/* PDF and Image Upload       */}
-        {/* ========================== */}
+        {/* PDF and Image Tabs */}
 
         {isFileTab && (
-
           <>
-
-            {/* Hidden File Input */}
-
             <input
               ref={fileInputRef}
               type="file"
@@ -784,30 +814,25 @@ export const AnalyzeCircular = () => {
               disabled={isBusy}
               className="hidden"
               onChange={(event) => {
-
                 handleFileSelect(
                   event.target.files[0]
                 );
 
                 event.target.value = "";
-
               }}
             />
 
 
-            {/* Upload Dropzone */}
+            {/* File Upload Dropzone */}
 
             {!selectedFile && (
-
               <div
                 onDragOver={(event) => {
-
                   event.preventDefault();
 
                   if (!isBusy) {
                     setDragging(true);
                   }
-
                 }}
                 onDragLeave={() =>
                   setDragging(false)
@@ -826,16 +851,13 @@ export const AnalyzeCircular = () => {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth="1.5"
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   />
-
                 </svg>
-
 
                 <p className="text-sm font-semibold text-[#0F172A]">
                   Drop a {activeTab} here
@@ -844,7 +866,6 @@ export const AnalyzeCircular = () => {
                 <p className="text-xs text-[#94A3B8] mt-2">
                   Maximum file size: 10 MB
                 </p>
-
 
                 <button
                   type="button"
@@ -857,46 +878,37 @@ export const AnalyzeCircular = () => {
                   Browse Files
                 </button>
 
-
                 <p className="text-[11px] text-[#94A3B8] mt-3">
-
                   {activeTab === "PDF"
                     ? "Supported format: PDF"
                     : "Supported formats: PNG, JPG, JPEG"}
-
                 </p>
 
               </div>
-
             )}
 
 
             {/* Selected File Preview */}
 
             {selectedFile && (
-
               <div className="space-y-4">
-
-
-                {/* File Information */}
 
                 <div className="flex items-center justify-between gap-3 p-4 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
 
                   <div className="min-w-0">
-
                     <p className="text-sm font-semibold text-[#0F172A] break-all">
                       {selectedFile.name}
                     </p>
 
                     <p className="text-xs text-[#64748B] mt-1">
-
-                      {(selectedFile.size / 1024 / 1024).toFixed(2)}
-                      {" "}MB
-
+                      {(
+                        selectedFile.size /
+                        1024 /
+                        1024
+                      ).toFixed(2)}{" "}
+                      MB
                     </p>
-
                   </div>
-
 
                   <button
                     type="button"
@@ -913,7 +925,6 @@ export const AnalyzeCircular = () => {
                 {/* Image Preview */}
 
                 {activeTab === "Image" && previewUrl && (
-
                   <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-4">
 
                     <img
@@ -923,14 +934,12 @@ export const AnalyzeCircular = () => {
                     />
 
                   </div>
-
                 )}
 
 
-                {/* Full Width PDF Preview */}
+                {/* PDF Preview */}
 
                 {activeTab === "PDF" && previewUrl && (
-
                   <div className="space-y-3">
 
                     <iframe
@@ -949,99 +958,17 @@ export const AnalyzeCircular = () => {
                     </a>
 
                   </div>
-
-                )}
-
-
-                {/* Extraction Success Message */}
-
-                {isTextReady && (
-
-                  <div className="flex items-start gap-3 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] p-4">
-
-                    <svg
-                      className="w-5 h-5 text-[#16A36A] shrink-0"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
-
-                    </svg>
-
-
-                    <div>
-
-                      <p className="text-sm font-semibold text-[#087F70]">
-                        Text extracted successfully
-                      </p>
-
-                      <p className="text-xs text-[#64748B] mt-1">
-
-                        {extractedText.length.toLocaleString()}
-                        {" "}characters extracted. Your circular
-                        is ready for analysis.
-
-                      </p>
-
-                    </div>
-
-                  </div>
-
-                )}
-
-
-                {/* Processing Message */}
-
-                {extracting && (
-
-                  <div className="rounded-xl bg-[#FFFBEB] border border-amber-200 p-4">
-
-                    <p className="text-xs font-medium text-amber-800">
-                      Extracting text from your circular.
-                      Please wait...
-                    </p>
-
-                  </div>
-
-                )}
-
-
-                {analyzing && (
-
-                  <div className="rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] p-4">
-
-                    <p className="text-xs font-medium text-[#087F70]">
-                      Analyzing the circular using the
-                      machine learning model and fraud
-                      detection rules. Please wait...
-                    </p>
-
-                  </div>
-
                 )}
 
               </div>
-
             )}
-
           </>
-
         )}
 
 
-        {/* ========================== */}
-        {/* Paste Text Tab             */}
-        {/* ========================== */}
+        {/* Paste Text Tab */}
 
         {activeTab === "Paste Text" && (
-
           <div className="space-y-3">
 
             <textarea
@@ -1055,10 +982,10 @@ export const AnalyzeCircular = () => {
                   : "Paste the complete job circular here..."
               }
               onChange={(event) => {
-
                 const value = event.target.value;
 
                 setExtractedText(value);
+
                 setError("");
 
                 setStatus(
@@ -1066,11 +993,9 @@ export const AnalyzeCircular = () => {
                     ? "ready"
                     : "idle"
                 );
-
               }}
               className="w-full p-4 rounded-xl border border-[#E2E8F0] bg-[#FAFCFD] text-sm text-[#182B36] leading-relaxed focus:outline-none focus:ring-2 focus:ring-[#087F70]/20 focus:border-[#087F70] resize-y"
             />
-
 
             <div className="flex flex-wrap items-center justify-between gap-2">
 
@@ -1080,26 +1005,20 @@ export const AnalyzeCircular = () => {
               </p>
 
               <p className="text-xs text-[#64748B]">
-
                 {extractedText.length.toLocaleString()}
                 {" / "}
                 {MAX_TEXT_LENGTH.toLocaleString()}
-
               </p>
 
             </div>
 
           </div>
-
         )}
 
 
-        {/* ========================== */}
-        {/* URL Tab                    */}
-        {/* ========================== */}
+        {/* URL Tab */}
 
-        {activeTab === "URL" && (
-
+        {isUrlTab && (
           <div className="space-y-4">
 
             <label
@@ -1114,51 +1033,135 @@ export const AnalyzeCircular = () => {
               type="url"
               value={url}
               disabled={isBusy}
+              maxLength={2048}
               onChange={(event) =>
-                setUrl(event.target.value)
+                handleUrlChange(event.target.value)
               }
               placeholder="https://example.com/job-circular"
-              className="w-full p-4 rounded-xl border border-[#E2E8F0] bg-[#FAFCFD] text-sm focus:outline-none focus:border-[#087F70]"
+              className="w-full p-4 rounded-xl border border-[#E2E8F0] bg-[#FAFCFD] text-sm text-[#182B36] focus:outline-none focus:ring-2 focus:ring-[#087F70]/20 focus:border-[#087F70]"
             />
 
-            <button
-              type="button"
-              disabled
-              className="w-full py-3 rounded-xl bg-[#0F172A] text-white text-sm font-semibold opacity-50 cursor-not-allowed"
-            >
-              Extract from URL
-            </button>
+            <p className="text-xs text-[#64748B]">
+              Enter a public webpage containing the
+              complete job circular.
+            </p>
 
-            <div className="p-4 rounded-xl bg-[#FFFBEB] border border-amber-200 text-xs text-amber-800">
-              URL extraction is not connected in this
-              component yet. For now, copy the circular
-              text and use the Paste Text option.
+
+            {/* Extracted Webpage Information */}
+
+            {isTextReady && (
+              <div className="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-4 space-y-2">
+
+                <p className="text-xs font-semibold text-[#64748B]">
+                  Extracted Webpage
+                </p>
+
+                <p className="text-sm font-bold text-[#0F172A] break-words">
+                  {urlTitle || "Job Circular Webpage"}
+                </p>
+
+                <p className="text-xs text-[#087F70] break-all">
+                  {extractedSourceUrl || url}
+                </p>
+
+              </div>
+            )}
+
+
+            {/* URL Information */}
+
+            <div className="rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] p-4">
+
+              <p className="text-xs text-[#64748B] leading-relaxed">
+                Some websites require login or block
+                automated extraction. If extraction fails,
+                use the PDF, Image or Paste Text option.
+              </p>
+
             </div>
 
           </div>
-
         )}
 
 
-        {/* ========================== */}
-        {/* Status and Primary Action  */}
-        {/* ========================== */}
+        {/* Extraction Success Message */}
+
+        {(isFileTab || isUrlTab) && isTextReady && (
+          <div className="flex items-start gap-3 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] p-4">
+
+            <svg
+              className="w-5 h-5 text-[#16A36A] shrink-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+
+            <div>
+              <p className="text-sm font-semibold text-[#087F70]">
+                Text extracted successfully
+              </p>
+
+              <p className="text-xs text-[#64748B] mt-1">
+                {extractedText.length.toLocaleString()}{" "}
+                characters extracted. Your circular is
+                ready for analysis.
+              </p>
+            </div>
+
+          </div>
+        )}
+
+
+        {/* Extraction Loading Message */}
+
+        {extracting && (
+          <div className="rounded-xl bg-[#FFFBEB] border border-amber-200 p-4">
+
+            <p className="text-xs font-medium text-amber-800">
+              {isUrlTab
+                ? "Retrieving and extracting text from the webpage. Please wait..."
+                : "Extracting text from your circular. Please wait..."}
+            </p>
+
+          </div>
+        )}
+
+
+        {/* Analysis Loading Message */}
+
+        {analyzing && (
+          <div className="rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] p-4">
+
+            <p className="text-xs font-medium text-[#087F70]">
+              Analyzing the circular using the machine
+              learning model and fraud detection rules.
+              Please wait...
+            </p>
+
+          </div>
+        )}
+
+
+        {/* Status and Primary Action */}
 
         {(
           (isFileTab && selectedFile) ||
-          activeTab === "Paste Text"
+          activeTab === "Paste Text" ||
+          isUrlTab
         ) && (
-
           <div className="space-y-4 pt-2">
-
-
-            {/* Dynamic Status */}
 
             <div
               aria-live="polite"
               className="flex flex-wrap items-center gap-2 text-xs"
             >
-
               <span className="font-medium text-[#64748B]">
                 Status:
               </span>
@@ -1168,7 +1171,6 @@ export const AnalyzeCircular = () => {
               >
                 {currentStatus.label}
               </span>
-
             </div>
 
 
@@ -1180,7 +1182,8 @@ export const AnalyzeCircular = () => {
               disabled={
                 isBusy ||
                 (isFileTab && !selectedFile) ||
-                (activeTab === "Paste Text" && !isTextReady)
+                (activeTab === "Paste Text" && !isTextReady) ||
+                (isUrlTab && !url.trim())
               }
               className={`w-full py-3.5 px-4 rounded-xl text-white text-sm font-semibold transition-colors shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
                 isAnalyzeButton
@@ -1190,9 +1193,7 @@ export const AnalyzeCircular = () => {
             >
 
               {isBusy && (
-
                 <span className="loading loading-spinner loading-sm"></span>
-
               )}
 
               {getButtonLabel()}
@@ -1203,24 +1204,17 @@ export const AnalyzeCircular = () => {
             {/* Disclaimer */}
 
             <p className="text-[11px] text-[#94A3B8] leading-relaxed text-center">
-
               Analysis results are AI-based risk estimates
               and do not guarantee whether a circular is
               genuine or fraudulent.
-
             </p>
 
           </div>
-
         )}
 
       </div>
-
     </div>
-
   );
-
 };
-
 
 export default AnalyzeCircular;
