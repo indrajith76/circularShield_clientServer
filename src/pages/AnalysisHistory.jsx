@@ -47,7 +47,7 @@ export const AnalysisHistory = () => {
     <div className="space-y-6">
       {/* 1. Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Analysis History
         </h1>
         <p className="text-sm text-[#64748B] mt-1">
@@ -89,7 +89,7 @@ export const AnalysisHistory = () => {
             className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4"
           >
             <div>
-              <p className="text-sm font-bold text-[#102C3A]">{item.title}</p>
+              <p className="text-sm font-bold text-[#0F172A]">{item.title}</p>
               <p className="text-xs text-[#64748B] mt-0.5">{item.meta}</p>
             </div>
 
@@ -132,3 +132,4 @@ export const AnalysisHistory = () => {
 };
 
 export default AnalysisHistory;
+

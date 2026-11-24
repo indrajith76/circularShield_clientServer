@@ -8,6 +8,11 @@ import ReportScam from '../pages/ReportScam';
 import AnalysisHistory from '../pages/AnalysisHistory';
 import SafetyTips from '../pages/SafetyTips';
 import AdminDashboard from '../pages/AdminDashboard';
+import UserManagement from '../pages/UserManagement';
+import AdminScamReports from '../pages/AdminScamReports';
+import AdminOrganizations from '../pages/AdminOrganizations';
+import AdminSafetyTips from '../pages/AdminSafetyTips';
+import AdminDetectionStats from '../pages/AdminDetectionStats';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 
@@ -55,6 +60,26 @@ const router = createBrowserRouter([
       {
         path: '/admin/dashboard',
         element: <AdminDashboard />,
+      },
+      {
+        path: '/admin/users',
+        element: <UserManagement />,
+      },
+      {
+        path: '/admin/scam-reports',
+        element: <AdminScamReports />,
+      },
+      {
+        path: '/admin/organizations',
+        element: <AdminOrganizations />,
+      },
+      {
+        path: '/admin/safety-tips',
+        element: <AdminSafetyTips />,
+      },
+      {
+        path: '/admin/detection-stats',
+        element: <AdminDetectionStats />,
       },
     ],
   },

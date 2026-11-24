@@ -18,7 +18,7 @@ export const ReportScam = () => {
     <div className="space-y-6">
       {/* 1. Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Report a Scam
         </h1>
         <p className="text-sm text-[#64748B] mt-1">
@@ -32,7 +32,7 @@ export const ReportScam = () => {
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs space-y-5">
           {/* Category Selector */}
           <div>
-            <label className="block text-xs font-bold text-[#102C3A] mb-2.5">
+            <label className="block text-xs font-bold text-[#0F172A] mb-2.5">
               What are you reporting?
             </label>
             <div className="flex flex-wrap gap-2">
@@ -43,7 +43,7 @@ export const ReportScam = () => {
                   onClick={() => setCategory(cat)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                     category === cat
-                      ? 'bg-[#102C3A] text-white shadow-xs'
+                      ? 'bg-[#0F172A] text-white shadow-xs'
                       : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:bg-[#F8FAFC]'
                   }`}
                 >
@@ -55,7 +55,7 @@ export const ReportScam = () => {
 
           {/* Suspicious Detail */}
           <div>
-            <label className="block text-xs font-bold text-[#102C3A] mb-1.5">
+            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">
               Suspicious detail
             </label>
             <input
@@ -69,7 +69,7 @@ export const ReportScam = () => {
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold text-[#102C3A] mb-1.5">
+            <label className="block text-xs font-bold text-[#0F172A] mb-1.5">
               Description
             </label>
             <textarea
@@ -98,14 +98,14 @@ export const ReportScam = () => {
 
         {/* Right Column: My Report History */}
         <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs space-y-4">
-          <h2 className="text-sm font-bold text-[#102C3A]">
+          <h2 className="text-sm font-bold text-[#0F172A]">
             My Report History
           </h2>
 
           <div className="divide-y divide-[#F1F5F8]">
             <div className="py-3.5 first:pt-0 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-bold text-[#102C3A]">Fake bKash number</p>
+                <p className="text-sm font-bold text-[#0F172A]">Fake bKash number</p>
                 <p className="text-xs text-[#64748B] mt-0.5">20 Nov</p>
               </div>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFFBEB] text-[#D99A28]">
@@ -115,7 +115,7 @@ export const ReportScam = () => {
 
             <div className="py-3.5 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-bold text-[#102C3A]">Fake company page</p>
+                <p className="text-sm font-bold text-[#0F172A]">Fake company page</p>
                 <p className="text-xs text-[#64748B] mt-0.5">17 Nov</p>
               </div>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#ECFDF5] text-[#16A36A]">
@@ -125,7 +125,7 @@ export const ReportScam = () => {
 
             <div className="py-3.5 flex items-center justify-between gap-3">
               <div>
-                <p className="text-sm font-bold text-[#102C3A]">Application link</p>
+                <p className="text-sm font-bold text-[#0F172A]">Application link</p>
                 <p className="text-xs text-[#64748B] mt-0.5">12 Nov</p>
               </div>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FEF2F2] text-[#DC4B4B]">
@@ -140,3 +140,4 @@ export const ReportScam = () => {
 };
 
 export default ReportScam;
+

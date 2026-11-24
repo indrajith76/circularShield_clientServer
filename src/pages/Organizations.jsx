@@ -54,7 +54,7 @@ export const Organizations = () => {
     <div className="space-y-6">
       {/* 1. Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Verified Organizations
         </h1>
         <p className="text-sm text-[#64748B] mt-1">
@@ -84,7 +84,7 @@ export const Organizations = () => {
               className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4 cursor-pointer hover:bg-[#F8FAFC] -mx-3 px-3 rounded-xl transition-colors"
             >
               <div>
-                <p className="text-sm font-bold text-[#102C3A]">{org.name}</p>
+                <p className="text-sm font-bold text-[#0F172A]">{org.name}</p>
                 <p className="text-xs text-[#64748B] mt-0.5">{org.subtitle}</p>
               </div>
 
@@ -102,7 +102,7 @@ export const Organizations = () => {
           <h2 className="text-sm font-bold text-[#64748B]">Company Profile</h2>
 
           <div className="space-y-3">
-            <h3 className="text-xl font-bold text-[#102C3A]">{selectedOrg.name}</h3>
+            <h3 className="text-xl font-bold text-[#0F172A]">{selectedOrg.name}</h3>
             <span
               className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide ${selectedOrg.statusColor}`}
             >
@@ -113,17 +113,17 @@ export const Organizations = () => {
           <div className="space-y-4 pt-2 text-xs">
             <div>
               <p className="font-semibold text-[#64748B]">Official website</p>
-              <p className="text-sm font-medium text-[#102C3A] mt-0.5">{selectedOrg.website}</p>
+              <p className="text-sm font-medium text-[#0F172A] mt-0.5">{selectedOrg.website}</p>
             </div>
 
             <div>
               <p className="font-semibold text-[#64748B]">Official career page</p>
-              <p className="text-sm font-medium text-[#102C3A] mt-0.5">{selectedOrg.careerPage}</p>
+              <p className="text-sm font-medium text-[#0F172A] mt-0.5">{selectedOrg.careerPage}</p>
             </div>
 
             <div>
               <p className="font-semibold text-[#64748B]">Official email domain</p>
-              <p className="text-sm font-medium text-[#102C3A] mt-0.5">{selectedOrg.emailDomain}</p>
+              <p className="text-sm font-medium text-[#0F172A] mt-0.5">{selectedOrg.emailDomain}</p>
             </div>
           </div>
         </div>
@@ -133,3 +133,4 @@ export const Organizations = () => {
 };
 
 export default Organizations;
+

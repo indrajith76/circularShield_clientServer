@@ -8,7 +8,7 @@ export const AnalysisResult = () => {
       {/* 1. Header with Title & Download Action */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
             Analysis Result
           </h1>
           <p className="text-sm text-[#64748B] mt-1">
@@ -19,7 +19,7 @@ export const AnalysisResult = () => {
         <button
           type="button"
           onClick={() => window.print()}
-          className="inline-flex items-center justify-center px-4 py-2 rounded-xl border border-[#CBD5E1] bg-white text-xs font-semibold text-[#102C3A] hover:bg-[#F8FAFC] transition-colors shadow-xs"
+          className="inline-flex items-center justify-center px-4 py-2 rounded-xl border border-[#CBD5E1] bg-white text-xs font-semibold text-[#0F172A] hover:bg-[#F8FAFC] transition-colors shadow-xs"
         >
           Download PDF
         </button>
@@ -53,7 +53,7 @@ export const AnalysisResult = () => {
               />
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className="text-4xl font-extrabold text-[#102C3A]">87</span>
+              <span className="text-4xl font-extrabold text-[#0F172A]">87</span>
               <span className="text-xs text-[#94A3B8]">/ 100</span>
             </div>
           </div>
@@ -70,7 +70,7 @@ export const AnalysisResult = () => {
 
         {/* Right: Detected Fraud Indicators List */}
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs space-y-4">
-          <h2 className="text-sm font-bold text-[#102C3A]">
+          <h2 className="text-sm font-bold text-[#0F172A]">
             Detected Fraud Indicators
           </h2>
 
@@ -92,21 +92,21 @@ export const AnalysisResult = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E2E8F0] shadow-xs">
           <p className="text-xs text-[#64748B] font-medium">Organization</p>
-          <p className="text-sm font-bold text-[#102C3A] mt-1">
+          <p className="text-sm font-bold text-[#0F172A] mt-1">
             No match in verified directory
           </p>
         </div>
 
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E2E8F0] shadow-xs">
           <p className="text-xs text-[#64748B] font-medium">Application URL</p>
-          <p className="text-sm font-bold text-[#102C3A] mt-1">
+          <p className="text-sm font-bold text-[#0F172A] mt-1">
             Not on an official domain
           </p>
         </div>
 
         <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E2E8F0] shadow-xs">
           <p className="text-xs text-[#64748B] font-medium">Reported contacts</p>
-          <p className="text-sm font-bold text-[#102C3A] mt-1">
+          <p className="text-sm font-bold text-[#0F172A] mt-1">
             Number matches 2 prior reports
           </p>
         </div>
@@ -115,14 +115,14 @@ export const AnalysisResult = () => {
       {/* 4. Bilingual Explanations */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-xs space-y-2">
-          <h3 className="text-xs font-bold text-[#102C3A]">বাংলা ব্যাখ্যা</h3>
+          <h3 className="text-xs font-bold text-[#0F172A]">বাংলা ব্যাখ্যা</h3>
           <p className="text-sm text-[#334155] leading-relaxed">
             এই বিজ্ঞপ্তিতে চাকরির জন্য টাকা চাওয়া হয়েছে এবং ব্যক্তিগত বিকাশ নম্বর দেওয়া হয়েছে। টাকা পাঠাবেন না।
           </p>
         </div>
 
         <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-xs space-y-2">
-          <h3 className="text-xs font-bold text-[#102C3A]">English Explanation</h3>
+          <h3 className="text-xs font-bold text-[#0F172A]">English Explanation</h3>
           <p className="text-sm text-[#334155] leading-relaxed">
             This circular asks for a fee and lists a personal wallet. Do not send money or personal documents.
           </p>
@@ -148,3 +148,4 @@ export const AnalysisResult = () => {
 };
 
 export default AnalysisResult;
+

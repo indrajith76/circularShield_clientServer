@@ -18,7 +18,7 @@ export const AnalyzeCircular = () => {
     <div className="space-y-6">
       {/* 1. Page Header */}
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
           Analyze a Job Circular
         </h1>
         <p className="text-sm text-[#64748B] mt-1">
@@ -35,8 +35,8 @@ export const AnalyzeCircular = () => {
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
               activeTab === tab
-                ? 'bg-[#102C3A] text-white shadow-xs'
-                : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#102C3A] hover:bg-[#F8FAFC]'
+                ? 'bg-[#0F172A] text-white shadow-xs'
+                : 'bg-white border border-[#E2E8F0] text-[#64748B] hover:text-[#0F172A] hover:bg-[#F8FAFC]'
             }`}
           >
             {tab}
@@ -48,7 +48,7 @@ export const AnalyzeCircular = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Card: File Preview / Dropzone */}
         <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs flex flex-col justify-between">
-          <h2 className="text-sm font-bold text-[#102C3A] mb-4">File Preview</h2>
+          <h2 className="text-sm font-bold text-[#0F172A] mb-4">File Preview</h2>
 
           <div className="border-2 border-dashed border-[#CBD5E1] rounded-2xl min-h-[320px] flex flex-col items-center justify-center p-6 text-center cursor-pointer hover:border-[#087F70] hover:bg-[#F8FAFC] transition-colors">
             <svg
@@ -64,7 +64,7 @@ export const AnalyzeCircular = () => {
                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
               />
             </svg>
-            <p className="text-sm font-semibold text-[#102C3A]">
+            <p className="text-sm font-semibold text-[#0F172A]">
               Drop a {activeTab} here
             </p>
             <p className="text-xs text-[#94A3B8] mt-1">
@@ -76,7 +76,7 @@ export const AnalyzeCircular = () => {
         {/* Right Card: Extracted Text & Trigger */}
         <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs flex flex-col justify-between space-y-4">
           <div>
-            <h2 className="text-sm font-bold text-[#102C3A] mb-3">
+            <h2 className="text-sm font-bold text-[#0F172A] mb-3">
               Extracted Text (editable)
             </h2>
             <textarea
@@ -113,3 +113,4 @@ export const AnalyzeCircular = () => {
 };
 
 export default AnalyzeCircular;
+

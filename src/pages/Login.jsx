@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import logo from '../assets/c_logo1.png';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -13,14 +14,17 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#102C3A] flex items-center justify-center p-4 sm:p-8">
+    <div className="min-h-screen bg-[#0F172A] flex items-center justify-center p-4 sm:p-8">
       <div className="max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         {/* Left Branding Column (Matching PDF Page 4) */}
         <div className="text-white space-y-4 px-4 sm:px-6">
           <Link to="/dashboard" className="inline-block">
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight hover:opacity-90 transition-opacity">
-              CircularShield
-            </h1>
+            <img
+              src={logo}
+              alt="CircularShield"
+              className="h-24 sm:h-28 w-auto max-w-[260px] object-contain drop-shadow-lg shrink-0"
+            />
+            <h1 className="sr-only">CircularShield</h1>
           </Link>
           <p className="text-sm sm:text-base text-[#94A3B8] leading-relaxed max-w-sm">
             Verify a job circular before you apply. চাকরির বিজ্ঞপ্তি যাচাই করুন, প্রতারণা এড়ান।
@@ -33,13 +37,13 @@ export const Login = () => {
           <div className="flex items-center gap-2 mb-6 p-1 bg-[#F1F5F9] rounded-xl w-fit">
             <button
               type="button"
-              className="px-5 py-2 rounded-lg text-xs font-bold bg-[#102C3A] text-white shadow-xs cursor-default"
+              className="px-5 py-2 rounded-lg text-xs font-bold bg-[#0F172A] text-white shadow-xs cursor-default"
             >
               Login
             </button>
             <Link
               to="/register"
-              className="px-5 py-2 rounded-lg text-xs font-bold text-[#64748B] hover:text-[#102C3A] transition-colors"
+              className="px-5 py-2 rounded-lg text-xs font-bold text-[#64748B] hover:text-[#0F172A] transition-colors"
             >
               Register
             </Link>
@@ -102,7 +106,7 @@ export const Login = () => {
             <div className="text-center pt-2">
               <Link
                 to="/register"
-                className="text-xs text-[#64748B] hover:text-[#102C3A] font-medium"
+                className="text-xs text-[#64748B] hover:text-[#0F172A] font-medium"
               >
                 New here? Create an account
               </Link>
@@ -115,3 +119,4 @@ export const Login = () => {
 };
 
 export default Login;
+

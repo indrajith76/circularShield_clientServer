@@ -1,14 +1,23 @@
 import { useState } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
 const Main = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
-  const currentIsAdmin = location.pathname.startsWith('/admin') || isAdmin;
+  // If path starts with /admin, we are in admin portal
+  const currentIsAdmin = location.pathname.startsWith('/admin');
+
+  const handleToggleRole = () => {
+    if (currentIsAdmin) {
+      navigate('/dashboard');
+    } else {
+      navigate('/admin');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F4F7FA] text-[#182B36] flex">
@@ -17,7 +26,7 @@ const Main = () => {
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
         isAdmin={currentIsAdmin}
-        onToggleRole={() => setIsAdmin(!isAdmin)}
+        onToggleRole={handleToggleRole}
       />
 
       {/* Main Content Area */}
@@ -25,6 +34,7 @@ const Main = () => {
         <Navbar
           onOpenSidebar={() => setSidebarOpen(true)}
           isAdmin={currentIsAdmin}
+          onToggleRole={handleToggleRole}
           title="CircularShield"
         />
 

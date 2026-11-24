@@ -6,7 +6,7 @@ export const Dashboard = () => {
       {/* 1. Header with greeting and quick CTA */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#102C3A] tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold text-[#0F172A] tracking-tight">
             স্বাগতম / Welcome back
           </h1>
           <p className="text-sm text-[#64748B] mt-1">
@@ -26,7 +26,7 @@ export const Dashboard = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-xs">
           <span className="text-xs font-medium text-[#64748B]">Total Analyzed</span>
-          <div className="text-3xl font-extrabold text-[#102C3A] mt-2">48</div>
+          <div className="text-3xl font-extrabold text-[#0F172A] mt-2">48</div>
         </div>
 
         <div className="bg-white rounded-2xl p-5 border border-[#E2E8F0] shadow-xs">
@@ -49,14 +49,14 @@ export const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column: Recent Analysis History & Mini Chart */}
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs space-y-6">
-          <h2 className="text-base font-bold text-[#102C3A]">
+          <h2 className="text-base font-bold text-[#0F172A]">
             Recent Analysis History
           </h2>
 
           <div className="divide-y divide-[#F1F5F8]">
             <div className="py-3.5 flex items-center justify-between gap-4 first:pt-0">
               <div>
-                <p className="text-sm font-semibold text-[#102C3A]">Officer – Trainee (Bank)</p>
+                <p className="text-sm font-semibold text-[#0F172A]">Officer – Trainee (Bank)</p>
                 <p className="text-xs text-[#64748B] mt-0.5">Image · 21 Nov</p>
               </div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide bg-[#ECFDF5] text-[#16A36A]">
@@ -66,7 +66,7 @@ export const Dashboard = () => {
 
             <div className="py-3.5 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-[#102C3A]">Data Entry – Work from Home</p>
+                <p className="text-sm font-semibold text-[#0F172A]">Data Entry – Work from Home</p>
                 <p className="text-xs text-[#64748B] mt-0.5">Text · 20 Nov</p>
               </div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide bg-[#FEF2F2] text-[#DC4B4B]">
@@ -76,7 +76,7 @@ export const Dashboard = () => {
 
             <div className="py-3.5 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-[#102C3A]">Sales Executive</p>
+                <p className="text-sm font-semibold text-[#0F172A]">Sales Executive</p>
                 <p className="text-xs text-[#64748B] mt-0.5">PDF · 18 Nov</p>
               </div>
               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold tracking-wide bg-[#FFFBEB] text-[#D99A28]">
@@ -87,7 +87,7 @@ export const Dashboard = () => {
 
           {/* Mini Analysis Statistics Bar Graphic */}
           <div className="pt-4 border-t border-[#F1F5F8]">
-            <h3 className="text-xs font-bold text-[#102C3A] mb-4">
+            <h3 className="text-xs font-bold text-[#0F172A] mb-4">
               Analysis Statistics
             </h3>
             <div className="flex items-end gap-3 h-24">
@@ -100,7 +100,7 @@ export const Dashboard = () => {
 
         {/* Right Column: Recent Scam Alerts */}
         <div className="bg-white rounded-2xl p-6 border border-[#E2E8F0] shadow-xs space-y-4">
-          <h2 className="text-base font-bold text-[#102C3A]">
+          <h2 className="text-base font-bold text-[#0F172A]">
             Recent Scam Alerts
           </h2>
 
@@ -124,3 +124,4 @@ export const Dashboard = () => {
 };
 
 export default Dashboard;
+
